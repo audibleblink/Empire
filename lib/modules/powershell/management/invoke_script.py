@@ -45,7 +45,7 @@ class Module(object):
             },
             'ScriptCmd' : {
                 'Description'   :   'Script command (Invoke-X) from file to run, along with any specified arguments.',
-                'Required'      :   True,
+                'Required'      :   False,
                 'Value'         :   ''
             }
         }
